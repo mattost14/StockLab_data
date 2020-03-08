@@ -120,7 +120,7 @@ list_img_ids = pd.read_csv('setorial2.csv')
 res=pd.DataFrame([],columns=['cvm', 'nome_pregao', 'ticker', 'list_of_tickers', 'atividade_principal', 'cnpj', 'site', 'free_float', 'participacao_gov','img'])
 i=0
 erroCount=0
-for cvm in list_of_cia['CD_CVM'].unique()[0:3]:
+for cvm in list_of_cia['CD_CVM'].unique():
     print(cvm)  
     row_of_dados_cia = getCIADados_fromB3(cvm)
     #print(row_of_dados_cia)
@@ -146,7 +146,8 @@ print(res)
 print('')
 print('Núm de erros encontrados: %d' %erroCount)
 data = {'dados_cia': res.to_dict('index')}
-print(json.dumps(data, indent=2))
+# data = res.to_dict('index')
+# print(json.dumps(data, indent=2))
 with open('./output_b3/dados_cia2.json', 'w') as outfile:
     json.dump(data, outfile, indent=2)
 
