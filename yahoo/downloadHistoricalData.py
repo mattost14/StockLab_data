@@ -45,10 +45,12 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
         with open('output/dividends/{}.csv'.format(ticker), 'wb') as f:
             f.write(response.content)
 
+
+
 if __name__ == "__main__":
     #tickers = allTickers
     tickers = ['PETR3','MGLU3','WEGE3']
-    period = 'LAST'
+    period = '1yr'
 
     refDate = datetime.datetime(1969,12,31)
     hoje = datetime.datetime.now()
@@ -59,7 +61,7 @@ if __name__ == "__main__":
         period1 = hoje - datetime.timedelta(days=365*5)
     elif period == '1yr':
         period1 = hoje - datetime.timedelta(days=365)
-    elif period == 'LAST':
+    elif period == '1d':
         period1 = hoje - datetime.timedelta(days=1)
     period1 = round((period1-refDate).total_seconds())
     period2 = round((hoje-refDate).total_seconds()) #last minute

@@ -4,12 +4,13 @@ import sys
 sys.path.append('/Users/BrunoMattos/Documents2/Dev/stocklab_data/Firestore')
 from uploadToFirestore import uploadDocumentFromJsonData
 
-inputfile = './output_b3/dados_cia2.json'
+inputfile = './output_b3/dados_cia.json'
 collectionID = 'dados_cia'
 
 with open(inputfile) as file:
     data = json.load(file)
 df = pd.DataFrame.from_dict(data['dados_cia'], orient='index')
+df['cvm']=df.index
 #df = df[['nome_pregao','img', 'ticker', 'list_of_tickers']]
 
 
