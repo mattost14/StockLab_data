@@ -1,0 +1,15 @@
+{
+  "name": "upload-script",
+  "version": "1.0.0",
+  "description": "script to upload data to firebase",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bruno Mattos",
+  "license": "ISC",
+  "devDependencies": {
+    "firestore-export-import": "^0.3.2"
+  },
+  "dependencies": {}
+}
