@@ -11,6 +11,8 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib, json
 import matplotlib.pyplot as plt
 import sys
+sys.path.append('/Users/BrunoMattos/Documents2/Dev/stocklab_data/Firestore')
+from uploadToFirestore import uploadDocumentToFirestore
 # import uploadToFirestore.uploadToFirestore             
 #import seaborn as sns
 #sns.set(rc={'figure.figsize':(15,10),"font.size":16,"axes.titlesize":16,"axes.labelsize":16})
@@ -163,15 +165,8 @@ DRE_NIVEL2['CD_CONTA']=DRE_NIVEL2['DESC_SIMPLES'].map(MapaNiveis)
 
 #
 DRE_NIVEL1e2=pd.concat([DRE_NIVEL1,DRE_NIVEL2])
-
-
-# %%
+#Mapeamento da Escala dos Valores
 DRE_NIVEL1e2['ESCALA'] = DRE_NIVEL1e2.ESCALA_MOEDA.map({'MIL': 1000, 'MILHAR': 1000, 'UNIDADE': 1})
-
-
-# %%
-df = DRE_NIVEL1e2[DRE_NIVEL1e2.CD_CVM==cvm].groupby(['YEAR','TRIM','DESC_SIMPLES','CD_CONTA'])['TRIM_VL', 'VL_CONTA', 'NIVEL','ESCALA'].sum().reset_index()
-df = df.sort_values(['YEAR','TRIM','CD_CONTA']).reset_index(drop=True)
 
 
 # %%
@@ -259,59 +254,25 @@ for cvm in DRE_NIVEL1e2.CD_CVM.unique()[0:10]:
 # cvm= 80160 #- Santander
 # cvm=20532 #- Santander (Brasil)
 # cvm =94 #Pan
-cvm = 5410 # WEG
-ano = 2019
-trim = 4
+# cvm = 5410 # WEG
+# ano = 2019
+# trim = 4
 
-df = DRE_NIVEL1e2[DRE_NIVEL1e2.CD_CVM==cvm].groupby(['YEAR','TRIM','DESC_SIMPLES','CD_CONTA'])['TRIM_VL', 'VL_CONTA', 'NIVEL'].sum().reset_index()
-df = df.sort_values(['YEAR','TRIM','CD_CONTA']).reset_index(drop=True)
-df[(df.YEAR == ano) & ((df.NIVEL ==2) | (df.NIVEL ==3) | (df.NIVEL ==4)) & (df.TRIM == trim)]
-
-
-# %%
-dre = {}
-for cvm in DRE.CD_CVM.unique()[0:10]:
-    df = DRE[DRE.CD_CVM==cvm].groupby(['YEAR','TRIM','DS_CONTA','CD_CONTA'])['TRIM_VL', 'VL_CONTA'].sum().reset_index()
-    df=df.sort_values(['YEAR','TRIM','CD_CONTA']).reset_index(drop=True)
-    # df = df.head(2)
-    data = {"data" : df.to_dict('records')}
-    # data = {str(cvm): data}
-    with open('./output_cvm/dre/'+str(cvm)+'.json', 'w') as outfile:
-        json.dump(data, outfile, indent=2)
-    #data = {'trimestral':df.to_dict(orient='records')}
-    #data = {str(cvm): data}
-    #data = {str(cvm):df.to_dict('index')}
-    #print(json.dumps(data, indent=2))
-    #dre = {**dre, **data}
-    #js = json.dumps(data, indent=2)
-#with open('./output_cvm/dre/'+str(cvm)+'.json', 'w') as outfile:
-# dre = {'dre': dre}
-# print(json.dumps(dre, indent=2))
-# with open('./output_cvm/dre.json', 'w') as outfile:
-#     json.dump(dre, outfile, indent=2)
+# df = DRE_NIVEL1e2[DRE_NIVEL1e2.CD_CVM==cvm].groupby(['YEAR','TRIM','DESC_SIMPLES','CD_CONTA'])['TRIM_VL', 'VL_CONTA', 'NIVEL'].sum().reset_index()
+# df = df.sort_values(['YEAR','TRIM','CD_CONTA']).reset_index(drop=True)
+# df[(df.YEAR == ano) & ((df.NIVEL ==2) | (df.NIVEL ==3) | (df.NIVEL ==4)) & (df.TRIM == trim)]
 
 
 # %%
-ListOfCIA=DRE[['CNPJ_CIA', 'DENOM_CIA', 'CD_CVM']].drop_duplicates()
-ListOfCIA.to_csv('list_of_cia.csv', index= False)
-ListOfCIA
+### UPLOAD DOCUMENTS TO FIRESTORE ####
+path_to_output_folder = './output_cvm/dre/'
+json_files = [pos_json for pos_json in os.listdir(path_to_output_folder) if pos_json.endswith('.json')]
+for file in json_files:
+    print('Uploading ' + file + '...')
+    uploadDocumentToFirestore('dre',path_to_output_folder+file,file.split('.')[0])
+    print(' ')
 
 
 # %%
-DRE[(DRE.DENOM_CIA=='AMBEV S.A.') & (DRE.DS_CONTA=='Receita de Venda de Bens e/ou Serviços')].groupby(['YEAR', 'TRIM'])['TRIM_VL'].sum()#.plot.bar()
-
-
-# %%
-f=DRE[(DRE.DENOM_CIA=='AMBEV S.A.') & (DRE.DS_CONTA=='Receita de Venda de Bens e/ou Serviços')].groupby(['YEAR', 'TRIM'])['TRIM_VL'].sum()
-f=f.reset_index()
-f['TMT']=f.TRIM_VL.shift(+3)+f.TRIM_VL.shift(+2)+f.TRIM_VL.shift(+1)+f.TRIM_VL
-
-
-# %%
-f.set_index(['YEAR','TRIM']).TMT.plot.bar()
-
-
-# %%
-
 
 

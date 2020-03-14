@@ -36,8 +36,6 @@ def atualizar_package(zip_file_url, document):
     if document == 'cia_aberta-doc-itr': z.extractall('./input_cvm/itr')
     elif document == 'cia_aberta-doc-dfp-dre': z.extractall('./input_cvm/dfp')
     
-
-
 # ----- Informações Trimestrais -----
 def checkPackages(document):
 
