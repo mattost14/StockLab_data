@@ -10,9 +10,10 @@ import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib, json
 import matplotlib.pyplot as plt
-import sys
-sys.path.append('/Users/BrunoMattos/Documents2/Dev/stocklab_data/Firestore')
-from uploadToFirestore import uploadDocumentToFirestore
+
+#Disable warnings
+pd.options.mode.chained_assignment = None
+
 # import uploadToFirestore.uploadToFirestore             
 #import seaborn as sns
 #sns.set(rc={'figure.figsize':(15,10),"font.size":16,"axes.titlesize":16,"axes.labelsize":16})
@@ -73,6 +74,7 @@ MapNivel3 = {
 
 
 # %%
+print('STEP1 - Loading data from INPUT_CVM ...')
 DRE_ITR2015 = pd.read_csv("./input_cvm/itr/itr_cia_aberta_dre_con_2015.csv", thousands=',', sep=';', encoding='latin-1')
 DRE_ITR2016 = pd.read_csv("./input_cvm/itr/itr_cia_aberta_dre_con_2016.csv", thousands=',', sep=';', encoding='latin-1')
 DRE_ITR2017 = pd.read_csv("./input_cvm/itr/itr_cia_aberta_dre_con_2017.csv", thousands=',', sep=';', encoding='latin-1')
@@ -104,10 +106,13 @@ DRE=DRE[DRE.DT_INI_EXERC.dt.month==1]
 #Drop Dados com DATA de FIM diferente de MAR(3),JUN(6),SEP(9),DEC(12) 
 DRE=DRE[DRE.DT_FIM_EXERC.dt.month.isin([3,6,9,12])]
 
+print('STEP1 - COMPLETED')
+
 # %% [markdown]
 # Definido o trimestre correspondente de cada dado
 
 # %%
+print('STEP2 - CREATE COLUMNS: TRIM, YEAR, TRIM_VL, DESC_SIMPLES, ESCALA ...')
 def getTrim (di,df):
     n=(df-di)
     if (n.days<95 and n.days>85):
@@ -168,14 +173,19 @@ DRE_NIVEL1e2=pd.concat([DRE_NIVEL1,DRE_NIVEL2])
 #Mapeamento da Escala dos Valores
 DRE_NIVEL1e2['ESCALA'] = DRE_NIVEL1e2.ESCALA_MOEDA.map({'MIL': 1000, 'MILHAR': 1000, 'UNIDADE': 1})
 
+print('STEP2 - COMPLETED')
 
+print('STEP3 - LOOP TROUGH ALL CVM TO GENERATE JSON FILE AS OUTPUT ...')
 # %%
 def calculateAV(r):
     yr = r.YEAR
     trim = r.TRIM
     receita = df[(df.YEAR==yr) & (df.TRIM == trim) & (df.DESC_SIMPLES == 'Receita Líquida')]['TRIM_VL'].values[0]
     valor = r.TRIM_VL
-    return valor/receita
+    if receita!=0:
+        return valor/receita
+    else:
+        return np.nan
 
 def calculateMarginTrim(r):
     campo = r.DESC_SIMPLES
@@ -184,7 +194,10 @@ def calculateMarginTrim(r):
         trim = r.TRIM
         receita = df[(df.YEAR==yr) & (df.TRIM == trim) & (df.DESC_SIMPLES == 'Receita Líquida')]['TRIM_VL'].values[0]
         valor = r.TRIM_VL
-        return valor/receita
+        if receita!=0:
+            return valor/receita
+        else:
+            return np.nan
 
 def calculateMarginYear(r):
     campo = r.DESC_SIMPLES
@@ -193,7 +206,10 @@ def calculateMarginYear(r):
         trim = r.TRIM
         receita = df[(df.YEAR==yr) & (df.TRIM == trim) & (df.DESC_SIMPLES == 'Receita Líquida')]['VL_CONTA'].values[0]
         valor = r.VL_CONTA
-        return valor/receita
+        if receita!=0:
+            return valor/receita
+        else:
+            return np.nan
 
 def calculateMarginTTM(r):
     campo = r.DESC_SIMPLES
@@ -202,22 +218,32 @@ def calculateMarginTTM(r):
         trim = r.TRIM
         receita = df[(df.YEAR==yr) & (df.TRIM == trim) & (df.DESC_SIMPLES == 'Receita Líquida')]['TTM'].values[0]
         valor = r.TTM
-        return valor/receita
+        if receita!=0:
+            return valor/receita
+        else:
+            return np.nan
 
-for cvm in DRE_NIVEL1e2.CD_CVM.unique()[0:10]:
+numberOfCVM = DRE_NIVEL1e2.CD_CVM.nunique()
+count=0
+for cvm in DRE_NIVEL1e2.CD_CVM.unique():
+    count=count+1
+    print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
     df = DRE_NIVEL1e2[DRE_NIVEL1e2.CD_CVM==cvm].groupby(['YEAR','TRIM','DESC_SIMPLES','CD_CONTA'])['TRIM_VL', 'VL_CONTA', 'NIVEL','ESCALA'].sum().reset_index()
 
     #Sort para garantir o sequenciamento correto
     df = df.sort_values(['DESC_SIMPLES', 'YEAR','TRIM']).reset_index(drop=True)
     #Calculate Variação entre Trimestre - AH (Análise Horizontal)
-    cutTwo =     cutFour = (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(1)) 
+    cutTwo = (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(1)) 
     AH = []
     for i, row in df.iterrows():
         if cutTwo[i]:
-            ah = (df.iloc[i]['TRIM_VL']-df.iloc[i-1]['TRIM_VL'])/df.iloc[i-1]['TRIM_VL']
+            if df.iloc[i-1]['TRIM_VL']!=0:
+                ah = (df.iloc[i]['TRIM_VL']-df.iloc[i-1]['TRIM_VL'])/df.iloc[i-1]['TRIM_VL']
+            else:
+                ah = np.nan
             AH.append(ah)
         else:
-            AH.append(None)
+            AH.append(np.nan)
     df['AH']=pd.Series(AH)
     # Calculate TTM (Soma das últimas 4 rows)
     cutFour = (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(1)) & (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(2)) & (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(3))
@@ -226,7 +252,7 @@ for cvm in DRE_NIVEL1e2.CD_CVM.unique()[0:10]:
         if cutFour[i]:
             TTM.append(sum(df.iloc[i-3:i+1]['TRIM_VL'].values))
         else:
-            TTM.append(None)
+            TTM.append(np.nan)
     df['TTM']=pd.Series(TTM)
     #Sort novamente
     df = df.sort_values(['YEAR','TRIM','CD_CONTA']).reset_index(drop=True)
@@ -246,33 +272,6 @@ for cvm in DRE_NIVEL1e2.CD_CVM.unique()[0:10]:
     }
     with open('./output_cvm/dre/'+str(cvm)+'.json', 'w') as outfile:
         json.dump(data, outfile, indent=2)
+        print(' - ' + str(cvm)+'.json gravado.' )
 
-
-# %%
-# ----- SOMENTE PARA VISUALIZAÇÃO -------
-
-# cvm= 80160 #- Santander
-# cvm=20532 #- Santander (Brasil)
-# cvm =94 #Pan
-# cvm = 5410 # WEG
-# ano = 2019
-# trim = 4
-
-# df = DRE_NIVEL1e2[DRE_NIVEL1e2.CD_CVM==cvm].groupby(['YEAR','TRIM','DESC_SIMPLES','CD_CONTA'])['TRIM_VL', 'VL_CONTA', 'NIVEL'].sum().reset_index()
-# df = df.sort_values(['YEAR','TRIM','CD_CONTA']).reset_index(drop=True)
-# df[(df.YEAR == ano) & ((df.NIVEL ==2) | (df.NIVEL ==3) | (df.NIVEL ==4)) & (df.TRIM == trim)]
-
-
-# %%
-### UPLOAD DOCUMENTS TO FIRESTORE ####
-path_to_output_folder = './output_cvm/dre/'
-json_files = [pos_json for pos_json in os.listdir(path_to_output_folder) if pos_json.endswith('.json')]
-for file in json_files:
-    print('Uploading ' + file + '...')
-    uploadDocumentToFirestore('dre',path_to_output_folder+file,file.split('.')[0])
-    print(' ')
-
-
-# %%
-
-
+print('STEP3 - COMPLETED')

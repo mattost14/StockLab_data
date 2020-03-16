@@ -17,6 +17,11 @@ def uploadDocumentFromJsonData(collectionID, jsonData, documentID=False):
     else: #Set automatic ID for document
         db.collection(collectionID).add(jsonData)
 
+def uploadDocumentToSubcollectionFromJsonData(path, jsonData):
+    # print('Uploading document to collection: ' + collectionID)
+    doc_ref = db.document(path)
+    doc_ref.set(jsonData)
+
 def uploadDocumentToFirestore(collectionID, documentJson, documentID=False):
     # print('Uploading document to collection: ' + collectionID)
     with open(documentJson) as file:
