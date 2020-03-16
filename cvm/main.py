@@ -1,0 +1,3 @@
+import processDREdata
+
+exec('processDREdata')
