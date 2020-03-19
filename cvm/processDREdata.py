@@ -35,29 +35,41 @@ MapaNiveis = {
     'Lucro Líquido': 11,
 }
 MapNivel2 = {
+    #1
     'Receitas da Intermediação Financeira' : 'Receita Líquida',
     'Receitas das Operações' : 'Receita Líquida',
     'Receita de Venda de Bens e/ou Serviços': 'Receita Líquida',
+    #2
     'Despesas da Intermediação Financeira': 'Custos',
     'Custo dos Bens e/ou Serviços Vendidos': 'Custos',
     'Sinistros e Despesas das Operações':'Custos',
+    #3
     'Resultado Bruto': 'Lucro Bruto',
     'Resultado Bruto Intermediação Financeira': 'Lucro Bruto',
+    #4
     'Despesas/Receitas Operacionais': 'Despesas/Receitas Operacionais',
     'Despesas Administrativas': 'Despesas/Receitas Operacionais',
     'Outras Despesas/Receitas Operacionais': 'Despesas/Receitas Operacionais',
     'Outras Receitas e Despesas Operacionais': 'Despesas/Receitas Operacionais',
-    'Resultado Antes dos Tributos sobre o Lucro': 'EBT',
+    #7
     'Resultado Antes do Resultado Financeiro e dos Tributos' : 'EBIT',
-    'Imposto de Renda e Contribuição Social sobre o Lucro': 'Impostos',
-    # 'Resultado de Equivalência Patrimonial' : 'Resultado de Equivalência Patrimonial',
+    'Resultado Operacional': 'EBIT',
+    #8
     'Resultado Financeiro' : 'Resultado Financeiro',
+    # 'Resultado Não Operacional': 'Resultado Financeiro',
+    #9
+    'Resultado Antes dos Tributos sobre o Lucro': 'EBT',
+    #10
+    'Imposto de Renda e Contribuição Social sobre o Lucro': 'Impostos',
+    #11
     'Lucro/Prejuízo Consolidado do Período' : 'Lucro Líquido',
+    'Lucro/Prejuízo do Período':'Lucro Líquido',
     # 'Resultado Líquido das Operações Continuadas': 'Lucro Líquido'
 }
 MapNivel3 = {
     'Receitas Financeiras': 'Receitas Financeiras',
     'Despesas Financeiras': 'Despesas Financeiras',
+    #6
     'Despesas de Depreciação e Amortização' : 'Amortização/Depreciação'
 }
 MapGrupo = {
@@ -189,18 +201,17 @@ def calculateMarginTTM(r):
         else:
             return np.nan
 
+numberOfCVM = DRE.CD_CVM.nunique()
+count=0
 
-for grupo in ['Individual', 'Consolidado']:
-    print('Generating all DRE do Grupo: ' + grupo)
-    DF = DRE[DRE.GRUPO_DFP == grupo]
-    numberOfCVM = DF.CD_CVM.nunique()
-    count=0
-    for cvm in DF.CD_CVM.unique()[0:1]:
-        count=count+1
-        print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
-        df=[]
-        cvm = 1155
-        df = DF[(DF.CD_CVM==cvm)]
+for cvm in DRE.CD_CVM.unique()[0:1]:
+    count=count+1
+    print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
+    cvm = 1023
+    DF = DRE[(DRE.CD_CVM==cvm)]
+    for grupo in ['Individual', 'Consolidado']:
+        print('Grupo: ' + grupo)
+        df = DF[DF.GRUPO_DFP == grupo]
         if(len(df)):
             df = df.sort_values(['DESC_SIMPLES','DT_INI_EXERC', 'DT_FIM_EXERC'])
             df.reset_index(inplace=True, drop=True)
@@ -256,8 +267,12 @@ for grupo in ['Individual', 'Consolidado']:
             df['TRIM_ANO']=df.apply(lambda r: "%dT%d" %(r['TRIM'],r['YEAR']), axis=1)
 
             for ano in df.YEAR.unique():
-                #Gravando arquivo 
-                data = {"data" : df[df.YEAR==ano].to_dict('records')}
+                #Gravando arquivo
+                if(len(df[df.YEAR==ano])):
+                    data = df[df.YEAR==ano].to_dict('records')
+                else:
+                    data = []
+                
                 data = {
                     "cvm": int(cvm),
                     "ano": int(ano),
@@ -269,6 +284,6 @@ for grupo in ['Individual', 'Consolidado']:
                     os.makedirs(path)
                 with open(path+str(ano)+'.json', 'w') as outfile:
                     json.dump(data, outfile, indent=2)
-                    print(str(cvm) +  ' - '+ grupo +' - ' + str(ano)+'.json gravado - ' + str(df[df.YEAR==ano].size))
+                    print('  '+ str(cvm) +  ' - ' + grupo +' - ' + str(ano)+'.json gravado - ' + str(df[df.YEAR==ano].size))
         else:
             print('  ' + str(cvm) +  ' - ' + grupo +' - ' + 'EMPTY')
