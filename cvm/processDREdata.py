@@ -195,11 +195,11 @@ for grupo in ['Individual', 'Consolidado']:
     DF = DRE[DRE.GRUPO_DFP == grupo]
     numberOfCVM = DF.CD_CVM.nunique()
     count=0
-    for cvm in DF.CD_CVM.unique():
+    for cvm in DF.CD_CVM.unique()[0:1]:
         count=count+1
         print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
         df=[]
-        # cvm = 1155
+        cvm = 1155
         df = DF[(DF.CD_CVM==cvm)]
         if(len(df)):
             df = df.sort_values(['DESC_SIMPLES','DT_INI_EXERC', 'DT_FIM_EXERC'])
@@ -255,12 +255,20 @@ for grupo in ['Individual', 'Consolidado']:
             #Adicionando o TRIM_ANO como coluna
             df['TRIM_ANO']=df.apply(lambda r: "%dT%d" %(r['TRIM'],r['YEAR']), axis=1)
 
-            #Gravando arquivo
-            data = {"data" : df.to_dict('records')}
-            data = {
-                "cvm": int(cvm), 
-                "data" : data,
-            }
-            with open('./output_cvm/dre/'+grupo+'/'+str(cvm)+'.json', 'w') as outfile:
-                json.dump(data, outfile, indent=2)
-                print(grupo + ' - ' + str(cvm)+'.json gravado - ' + str(df.size) )
+            for ano in df.YEAR.unique():
+                #Gravando arquivo 
+                data = {"data" : df[df.YEAR==ano].to_dict('records')}
+                data = {
+                    "cvm": int(cvm),
+                    "ano": int(ano),
+                    "grupo": grupo, 
+                    "data" : data,
+                }
+                path = './output_cvm/dre/'+str(cvm)+'/'+grupo+'/'
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                with open(path+str(ano)+'.json', 'w') as outfile:
+                    json.dump(data, outfile, indent=2)
+                    print(str(cvm) +  ' - '+ grupo +' - ' + str(ano)+'.json gravado - ' + str(df[df.YEAR==ano].size))
+        else:
+            print('  ' + str(cvm) +  ' - ' + grupo +' - ' + 'EMPTY')
