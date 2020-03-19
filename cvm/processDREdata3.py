@@ -75,7 +75,7 @@ path = './input_cvm/dfp/dre_cia_aberta_ind_'
 for year in range(2015,2020,1):
     DRE_DFP_IND = pd.concat([pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
 
-DRE=pd.concat([DRE_ITR_CON,DRE_DFP_CON])
+DRE=pd.concat([DRE_ITR_CON,DRE_DFP_CON, DRE_DFP_IND, DRE_ITR_IND])
 
 
 #DATA REF
@@ -111,7 +111,7 @@ DRE_NIVEL1e2=pd.concat([DRE_NIVEL1,DRE_NIVEL2])
 #Mapeamento da Escala dos Valores
 DRE_NIVEL1e2['ESCALA'] = DRE_NIVEL1e2.ESCALA_MOEDA.map({'MIL': 1000, 'MILHAR': 1000, 'UNIDADE': 1})
 #Drop colunas desnecessárias
-DRE_NIVEL1e2.drop(['DT_REFER', 'VERSAO', 'GRUPO_DFP', 'ESCALA_MOEDA', 'MOEDA', 'ORDEM_EXERC', 'DS_CONTA'], axis=1, inplace=True)
+DRE_NIVEL1e2.drop(['DT_REFER', 'VERSAO', 'ESCALA_MOEDA', 'MOEDA', 'ORDEM_EXERC', 'DS_CONTA'], axis=1, inplace=True)
 
 print('STEP2 - COMPLETED')
 
