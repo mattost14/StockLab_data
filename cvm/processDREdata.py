@@ -1,7 +1,4 @@
-# To add a new cell, type '# %%'
-# To add a new markdown cell, type '# %% [markdown]'
 
-# %%
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib, json
@@ -204,10 +201,10 @@ def calculateMarginTTM(r):
 numberOfCVM = DRE.CD_CVM.nunique()
 count=0
 
-for cvm in DRE.CD_CVM.unique()[0:1]:
+for cvm in DRE.CD_CVM.unique():
     count=count+1
     print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
-    cvm = 1023
+    # cvm = 1023
     DF = DRE[(DRE.CD_CVM==cvm)]
     for grupo in ['Individual', 'Consolidado']:
         print('Grupo: ' + grupo)

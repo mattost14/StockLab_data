@@ -1,6 +1,6 @@
-import processDREdata, getCVMdata, uploadDREtoFirestore
+import processDREdata, downloadCVMdata, uploadDREtoFirestore
 
-exec('getCVMdata')
+exec('downloadCVMdata')
 
 exec('processDREdata')
 
