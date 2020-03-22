@@ -87,10 +87,35 @@ def checkPackages(document):
     input_log.to_csv('input_cvm/input_log.csv', index=False)
 
 if __name__ == "__main__":  
-    #checkPackages('cia_aberta-doc-itr')
+    # checkPackages('cia_aberta-doc-itr')
     checkPackages('cia_aberta-doc-dfp-dre')
 #print('Novo log:')
 #print(input_log)
 
-
+docs = ["cia_aberta-cad",
+ "cia_aberta-doc-dfp-bpa",
+  "cia_aberta-doc-dfp-bpp", 
+  "cia_aberta-doc-dfp-dfc_md", 
+  "cia_aberta-doc-dfp-dfc_mi", 
+  "cia_aberta-doc-dfp-dmpl", 
+  "cia_aberta-doc-dfp-dre", 
+  "cia_aberta-doc-dfp-dva", 
+  "cia_aberta-doc-fre", 
+  "cia_aberta-doc-itr", 
+  "distrpubl",
+  "emissores",
+  "fi-cad",
+  "fidc-doc-inf_mensal", 
+  "fi-doc-balancete", 
+  "fi-doc-cda",
+  "fi-doc-compl",
+  "fi-doc-eventual",
+  "fi-doc-extrato",
+  "fi-doc-inf_diario",
+  "fi-doc-lamina",
+  "fi-doc-perfil_mensal",
+  "fie-cad",
+  "fie-medidas",
+  "fip-doc-inf_trimestral", 
+  "intermediario-cad"]
 
