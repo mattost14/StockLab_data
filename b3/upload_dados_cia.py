@@ -30,6 +30,7 @@ def generateKeywords(nome, ticker):
 df['keywords'] = df.apply(lambda row: generateKeywords(row.nome_pregao, row.ticker), axis=1)
 #print(df[['nome_pregao','img', 'ticker', 'list_of_tickers']].head(4))
 # print(df.head(5).to_dict(orient='index'))
+# print(df)
 cias = df.to_dict(orient='index')
 contador=0
 for key in cias:

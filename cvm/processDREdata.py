@@ -129,6 +129,12 @@ DRE=DRE[DRE.ORDEM_EXERC=='ÚLTIMO']
 #Drop colunas desnecessárias
 DRE.drop(['DT_REFER', 'VERSAO', 'ESCALA_MOEDA', 'MOEDA', 'ORDEM_EXERC', 'DS_CONTA'], axis=1, inplace=True)
 
+ListOfCias = DRE[['CD_CVM', 'DENOM_CIA', 'CNPJ_CIA']].drop_duplicates()
+ListOfCias.sort_values('DENOM_CIA', inplace=True)
+ListOfCias.reset_index(inplace=True, drop=True)
+ListOfCias.to_csv('./output_cvm/list_of_cias.csv')
+print('- Saved list_of_cias.csv')
+
 # %% [markdown]
 # Definido o trimestre correspondente de cada dado
 
@@ -201,7 +207,7 @@ def calculateMarginTTM(r):
 numberOfCVM = DRE.CD_CVM.nunique()
 count=0
 
-for cvm in DRE.CD_CVM.unique():
+for cvm in DRE.CD_CVM.unique()[0:0]:
     count=count+1
     print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
     # cvm = 1023

@@ -7,7 +7,11 @@ from uploadToFirestore import uploadDocumentToFirestore
 print('STEP4 - UPLOADING DATA TO FIRESTORE')
 path_to_output_folder = './output_cvm/dre/'
 cvm_folders = [cvm_folder for cvm_folder in os.listdir(path_to_output_folder)]
+total = len(cvm_folders)
+count=0
 for cvm_folder in cvm_folders:
+    count=count+1
+    print(str(count)+'/'+str(total))
     for grupo in ['consolidado', 'individual']:
         path =path_to_output_folder+cvm_folder+'/'+grupo
         if os.path.exists(path):

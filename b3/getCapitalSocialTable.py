@@ -56,7 +56,7 @@ if response:
     data = {'capital_social':df.to_dict(orient='records')}
     #js = json.dumps(data, indent=2)
     with open('./output_b3/capital_social.json', 'w') as outfile:
-        json.dump(data, outfile)
+        json.dump(data, outfile, indent=2)
     #df.head(5).to_json('capital_social.json', orient='records')
 else:
     print('!!! An error has occurred try connecting to B3 server. Error: {}'.format(response.status_code))
