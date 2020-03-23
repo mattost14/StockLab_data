@@ -35,6 +35,8 @@ def atualizar_package(zip_file_url, document):
     z = ZipFile(io.BytesIO(r.content))
     if document == 'cia_aberta-doc-itr': z.extractall('./input_cvm/itr')
     elif document == 'cia_aberta-doc-dfp-dre': z.extractall('./input_cvm/dfp')
+    elif document == 'cia_aberta-doc-dfp-bpa': z.extractall('./input_cvm/dfp')
+    elif document == 'cia_aberta-doc-dfp-bpp': z.extractall('./input_cvm/dfp')
     
 # ----- Informações Trimestrais -----
 def checkPackages(document):
@@ -88,7 +90,9 @@ def checkPackages(document):
 
 if __name__ == "__main__":  
     # checkPackages('cia_aberta-doc-itr')
-    checkPackages('cia_aberta-doc-dfp-dre')
+    # checkPackages('cia_aberta-doc-dfp-dre')
+    # checkPackages('cia_aberta-doc-dfp-bpa')
+    checkPackages('cia_aberta-doc-dfp-bpp')
 #print('Novo log:')
 #print(input_log)
 
