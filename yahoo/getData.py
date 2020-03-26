@@ -7,7 +7,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 
-
+#inputfile = '/home/mattost14/StockLab_data/b3/output_b3/dados_cia.json'
+inputfile = '/Users/BrunoMattos/Documents2/Dev/stocklab_data/b3/output_b3/dados_cia.json'
 
 def getCrumb():
     url = 'http://finance.yahoo.com/lookup?s=x' #Dummy url
@@ -61,7 +62,10 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
         if os.path.exists(path):
             df = pd.read_csv(path)
             df.Date = pd.to_datetime(df.Date)
-            lastday=df.Date.iloc[-1]
+            if(len(df)):
+                lastday=df.Date.iloc[-1]
+            else:
+                lastday=datetime(1969,12,31)
             newdata.Date = pd.to_datetime(newdata.Date)
             newdata=newdata.sort_values('Date').reset_index(drop=True)
             newdata=newdata.loc[newdata.Date > lastday]
@@ -81,48 +85,34 @@ def getLastDayInDataBase(ticker, database):
         df = pd.read_csv(path)
         df.Date = pd.to_datetime(df.Date)
         df=df.sort_values('Date').reset_index(drop=True)
-        return df.Date.iloc[-1]
+        if(len(df)):
+            return df.Date.iloc[-1]
+        else:
+            return  datetime(1969,12,31)
 
 def updateDailyDataBase(ticker, l, database):
     refDate = datetime(1969,12,31)
     hoje = datetime.now() - timedelta(hours=3) #Brasilia Local Time (UTC-3h)
     lastday = getLastDayInDataBase(ticker, database)
-    print(lastday)
+    # print(lastday)
     period1 = round((lastday-refDate).total_seconds())
     period2 = round((hoje-refDate).total_seconds())
-    # print(lastday)
-    # # print(period1)
-    # # print(period2)
-    # print((period2-period1)/3600 )
+
     if (period2-period1)/3600 > 24:
         print(' - atualizando dados para: ' + ticker)
         downloadData(ticker, period1, period2, '1d', database, l['crumb'], l['cookies'])
     else:
         print( '   ' + ticker + ' - já atualizado no banco de dados DAILY.')
-        #downloadData(ticker, period1, period2, '1d', 'history', l['crumb'], l['cookies'])
 
-# def createIntradayDataBase(tickers, l):
-#     refDate = datetime(1969,12,31)
-#     hoje = datetime.now()
-#     period1 = hoje - timedelta(days=7)
-#     period1 = round((period1-refDate).total_seconds())
-#     period2 = round((hoje-refDate).total_seconds()) #last minute
-#     downloadData(ticker, period1, period2, '1d', 'history', l['crumb'], l['cookies'])
     
 if __name__ == "__main__":
-
-    #inputfile = '~/stocklab_data/b3/output_b3/dados_cia.json'
-    inputfile = '/Users/BrunoMattos/Documents2/Dev/stocklab_data/b3/output_b3/dados_cia.json'
-    # inputfile = '/home/mattost14/StockLab_data/b3/output_b3/dados_cia.json'
-    collectionID = 'dados_cia'
-
     with open(inputfile) as file:
         data = json.load(file)
     df = pd.DataFrame.from_dict(data['dados_cia'], orient='index')
     allTickers = []
     df.list_of_tickers.map(lambda l: allTickers.extend(l))
     allTickers.sort()
-    allTickers = ['ABEV3']
+    # allTickers = ['ADHM3']
     l = getCrumb()
     numOfTickers = len(allTickers)
     count=0
@@ -133,8 +123,3 @@ if __name__ == "__main__":
         updateDailyDataBase(ticker, l, 'historical')
         print(' - dividends:')
         updateDailyDataBase(ticker, l, 'dividends')
-        #print(str(count)+ '/'+ str(numOfTickers) +' - downloading data for: ' + ticker)
-        #downloadData(ticker, period1, period2, '1d', 'history', l['crumb'], l['cookies'])
-        #get dividends:
-        #downloadData(ticker, period1, period2, '1d', 'div', l['crumb'], l['cookies'])
-    #print(os.path)
