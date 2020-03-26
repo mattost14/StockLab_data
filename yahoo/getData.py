@@ -7,8 +7,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 
-#inputfile = '/home/mattost14/StockLab_data/b3/output_b3/dados_cia.json'
-inputfile = '/Users/BrunoMattos/Documents2/Dev/stocklab_data/b3/output_b3/dados_cia.json'
+inputfile = '/home/mattost14/StockLab_data/b3/output_b3/dados_cia.json'
+#inputfile = '/Users/BrunoMattos/Documents2/Dev/stocklab_data/b3/output_b3/dados_cia.json'
 
 def getCrumb():
     url = 'http://finance.yahoo.com/lookup?s=x' #Dummy url
