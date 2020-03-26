@@ -73,7 +73,7 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
 
 if __name__ == "__main__":
     tickers = allTickers
-    #tickers = ['PETR3','MGLU3','WEGE3', 'SHUL4', 'SHUL3']
+    # tickers = ['EMBR3']
     period = 'MAX'
 
     refDate = datetime.datetime(1969,12,31)
@@ -93,6 +93,7 @@ if __name__ == "__main__":
     numOfTickers = len(tickers)
     count=0
     for ticker in tickers:
+        ticker
         count=count+1
         print(str(count)+ '/'+ str(numOfTickers) +' - downloading data for: ' + ticker)
         downloadData(ticker, period1, period2, '1d', 'history', l['crumb'], l['cookies'])
