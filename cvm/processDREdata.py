@@ -22,7 +22,7 @@ MapaNiveis = {
     'Lucro Bruto':3,
     'Despesas/Receitas Operacionais':4,
     'EBITDA': 5,
-    'Despesas de Depreciação e Amortização': 6,
+    'Amortização/Depreciação': 6,
     'EBIT' : 7,
     'Resultado Financeiro': 8,
         'Receitas Financeiras': 8.1,

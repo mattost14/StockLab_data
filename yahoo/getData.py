@@ -28,7 +28,7 @@ def getCrumb():
 
 def isJson(data):
     try:
-        json_content = json.loads(data)
+        json_content = json.loads(data.decode('utf-8'))
     except ValueError as e:
         return False
     return True
@@ -39,7 +39,7 @@ def checkResponse(res):
         print('Error: status code: '+ str(res.status_code))
         return False
     elif(isJson(res.content)):
-        json_content = json.loads(data)
+        json_content = json.loads(res.content.decode('utf-8'))
         if(json_content['finance']['error']['code']):
             if(json_content['finance']['error']['code']=="Unauthorized"):
                 print('Error: Unauthorized - ' + json_content['finance']['error']['description'])
