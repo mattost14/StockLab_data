@@ -101,15 +101,14 @@ def updateDailyDataBase(ticker, l, database):
     if (period2-period1)/3600 > 24:
        # print(' - atualizando dados para: ' + ticker)
         downloadData(ticker, period1, period2, '1d', database, l['crumb'], l['cookies'])
-    else:
+    # else:
         #print( '   ' + ticker + ' - já atualizado no banco de dados DAILY.')
-
 if __name__ == "__main__":
-    print('Atualizando dados')
     agora = datetime.now() - timedelta(hours=3)
-    print(' - Data: '+ agora)
+    print(' - Atualização iniciada em: ') 
+    print(agora)
     with open(inputfile) as file:
-       	data = json.load(file)
+        data = json.load(file)
     df = pd.DataFrame.from_dict(data['dados_cia'], orient='index')
     allTickers = []
     df.list_of_tickers.map(lambda l: allTickers.extend(l))
@@ -124,5 +123,7 @@ if __name__ == "__main__":
         #print(' - historical:')
         updateDailyDataBase(ticker, l, 'historical')
         #print(' - dividends:')
-       	 updateDailyDataBase(ticker, l, 'dividends')
-    print('Atualização Completa')
+        updateDailyDataBase(ticker, l, 'dividends')
+    termino = datetime.now() - timedelta(hours=3)
+    print(' - Atualização completada em: ') 
+    print(termino)
