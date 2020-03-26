@@ -1,12 +1,13 @@
 import sys, os
 import pandas as pd
 import datetime as dt
-sys.path.append('/Users/BrunoMattos/Documents2/Dev/stocklab_data/Firestore')
+sys.path.append('/home/mattost14/StockLab_data/Firestore')
+sys.path.append('/home/mattost14/StockLab_data/yahoo')
 from uploadToFirestore import uploadDocumentFromJsonData
 
 ### UPLOAD DOCUMENTS TO FIRESTORE ####
-path_to_output_historical = './output/historical/'
-path_to_output_dividends = './output/dividends/'
+path_to_output_historical = '/home/mattost14/StockLab_data/yahoo/output/historical/'
+path_to_output_dividends = '/home/mattost14/StockLab_data/yahoo/output/dividends/'
 
 
 if __name__ == "__main__":

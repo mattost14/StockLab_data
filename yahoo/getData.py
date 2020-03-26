@@ -28,7 +28,7 @@ def getCrumb():
 
 def isJson(data):
     try:
-        json_content = json.loads(data)
+        json_content = json.loads(data.decode('utf-8'))
     except ValueError as e:
         return False
     return True
@@ -39,7 +39,7 @@ def checkResponse(res):
         print('Error: status code: '+ str(res.status_code))
         return False
     elif(isJson(res.content)):
-        json_content = json.loads(data)
+        json_content = json.loads(res.content.decode('utf-8'))
         if(json_content['finance']['error']['code']):
             if(json_content['finance']['error']['code']=="Unauthorized"):
                 print('Error: Unauthorized - ' + json_content['finance']['error']['description'])
@@ -58,7 +58,7 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
     if(checkResponse(response)):
         # if(event == 'history'):
         newdata = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
-        path = './output/'+event+'/'+ ticker + '.csv'
+        path = '/home/mattost14/StockLab_data/yahoo/output/'+event+'/'+ ticker + '.csv'
         if os.path.exists(path):
             df = pd.read_csv(path)
             df.Date = pd.to_datetime(df.Date)
@@ -78,7 +78,7 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
 
 
 def getLastDayInDataBase(ticker, database):
-    path = './output/'+ database+ '/'+ ticker + '.csv'
+    path = '/home/mattost14/StockLab_data/yahoo/output/'+ database+ '/'+ ticker + '.csv'
     if not os.path.exists(path):
         return  datetime(1969,12,31)
     else:
@@ -99,27 +99,30 @@ def updateDailyDataBase(ticker, l, database):
     period2 = round((hoje-refDate).total_seconds())
 
     if (period2-period1)/3600 > 24:
-        print(' - atualizando dados para: ' + ticker)
+       # print(' - atualizando dados para: ' + ticker)
         downloadData(ticker, period1, period2, '1d', database, l['crumb'], l['cookies'])
     else:
-        print( '   ' + ticker + ' - já atualizado no banco de dados DAILY.')
+        #print( '   ' + ticker + ' - já atualizado no banco de dados DAILY.')
 
-    
 if __name__ == "__main__":
+    print('Atualizando dados')
+    agora = datetime.now() - timedelta(hours=3)
+    print(' - Data: '+ agora)
     with open(inputfile) as file:
-        data = json.load(file)
+       	data = json.load(file)
     df = pd.DataFrame.from_dict(data['dados_cia'], orient='index')
     allTickers = []
     df.list_of_tickers.map(lambda l: allTickers.extend(l))
     allTickers.sort()
-    # allTickers = ['ADHM3']
+    allTickers = ['ADHM3']
     l = getCrumb()
     numOfTickers = len(allTickers)
     count=0
     for ticker in allTickers:
         count=count+1
         print(str(count) + '/' + str(numOfTickers) + ' - ' + ticker)
-        print(' - historical:')
+        #print(' - historical:')
         updateDailyDataBase(ticker, l, 'historical')
-        print(' - dividends:')
-        updateDailyDataBase(ticker, l, 'dividends')
+        #print(' - dividends:')
+       	 updateDailyDataBase(ticker, l, 'dividends')
+    print('Atualização Completa')
