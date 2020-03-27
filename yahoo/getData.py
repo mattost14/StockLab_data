@@ -7,7 +7,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 
-inputfile = '/home/mattost14/StockLab_data/b3/output_b3/dados_cia.json'
+inputfile = 'b3/output_b3/dados_cia.json'
 #inputfile = '/Users/BrunoMattos/Documents2/Dev/stocklab_data/b3/output_b3/dados_cia.json'
 
 def getCrumb():
@@ -58,7 +58,7 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
     if(checkResponse(response)):
         # if(event == 'history'):
         newdata = pd.read_csv(io.StringIO(response.content.decode('utf-8')))
-        path = '/home/mattost14/StockLab_data/yahoo/output/'+event+'/'+ ticker + '.csv'
+        path = 'yahoo/output/'+event+'/'+ ticker + '.csv'
         if os.path.exists(path):
             df = pd.read_csv(path)
             df.Date = pd.to_datetime(df.Date)
@@ -78,7 +78,7 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
 
 
 def getLastDayInDataBase(ticker, database):
-    path = '/home/mattost14/StockLab_data/yahoo/output/'+ database+ '/'+ ticker + '.csv'
+    path = 'yahoo/output/'+ database+ '/'+ ticker + '.csv'
     if not os.path.exists(path):
         return  datetime(1969,12,31)
     else:
@@ -105,25 +105,23 @@ def updateDailyDataBase(ticker, l, database):
         #print( '   ' + ticker + ' - já atualizado no banco de dados DAILY.')
 if __name__ == "__main__":
     agora = datetime.now() - timedelta(hours=3)
-    print(' - Atualização iniciada em: ') 
-    print(agora)
+    print(' - Atualização iniciada em: '+ str(agora)) 
     with open(inputfile) as file:
         data = json.load(file)
     df = pd.DataFrame.from_dict(data['dados_cia'], orient='index')
     allTickers = []
     df.list_of_tickers.map(lambda l: allTickers.extend(l))
     allTickers.sort()
-    allTickers = ['ADHM3']
+    # allTickers = ['ADHM3']
     l = getCrumb()
     numOfTickers = len(allTickers)
     count=0
     for ticker in allTickers:
         count=count+1
-        print(str(count) + '/' + str(numOfTickers) + ' - ' + ticker)
+        print('  ' + str(count) + '/' + str(numOfTickers) + ' - ' + ticker)
         #print(' - historical:')
         updateDailyDataBase(ticker, l, 'historical')
         #print(' - dividends:')
         updateDailyDataBase(ticker, l, 'dividends')
     termino = datetime.now() - timedelta(hours=3)
-    print(' - Atualização completada em: ') 
-    print(termino)
+    print(' - Atualização completada em: '+ str(termino)) 

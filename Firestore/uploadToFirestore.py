@@ -4,7 +4,7 @@ from firebase_admin import firestore
 import pandas as pd
 
 
-cred = credentials.Certificate("/home/mattost14/StockLab_data/Firestore/serviceAccountKey-US.json")
+cred = credentials.Certificate("Firestore/serviceAccountKey-US.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
