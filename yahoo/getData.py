@@ -1,6 +1,7 @@
 #!/usr/bin/python3.6
 import requests
 import scrapy
+import time
 import os, io
 import json
 import pandas as pd
@@ -119,6 +120,7 @@ if __name__ == "__main__":
     for ticker in allTickers:
         count=count+1
         print('  ' + str(count) + '/' + str(numOfTickers) + ' - ' + ticker)
+        time.sleep(5)
         #print(' - historical:')
         updateDailyDataBase(ticker, l, 'historical')
         #print(' - dividends:')
