@@ -3,15 +3,18 @@ import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib, json
 import matplotlib.pyplot as plt
-import sys
-sys.path.append('/Users/BrunoMattos/Documents2/Dev/stocklab_data/Firestore')
-from uploadToFirestore import uploadDocumentToFirestore
+# import sys
+# sys.path.append('/Users/BrunoMattos/Documents2/Dev/stocklab_data/Firestore')
+# from uploadToFirestore import uploadDocumentToFirestore
 import os
 #Disable warnings
 pd.options.mode.chained_assignment = None
 
 itr_input = './input_cvm/itr/'
 dfp_input = './input_cvm/dfp/'
+
+yearStart = 2015
+yearEnd = 2020
 # print(os.listdir("./input_cvm/itr"))
 
 
@@ -78,23 +81,27 @@ MapGrupo = {
 # %%
 DRE_ITR_CON = pd.DataFrame()
 path = './input_cvm/itr/itr_cia_aberta_dre_con_'
-for year in range(2015,2020,1):
-    DRE_ITR_CON = pd.concat([DRE_ITR_CON, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
+for year in range(yearStart,yearEnd+1,1):
+    if os.path.exists(path+str(year)+'.csv'):
+        DRE_ITR_CON = pd.concat([DRE_ITR_CON, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
 
 DRE_ITR_IND = pd.DataFrame()
 path = './input_cvm/itr/itr_cia_aberta_dre_ind_'
-for year in range(2015,2020,1):
-    DRE_ITR_IND = pd.concat([DRE_ITR_IND, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
+for year in range(yearStart,yearEnd+1,1):
+    if os.path.exists(path+str(year)+'.csv'):
+        DRE_ITR_IND = pd.concat([DRE_ITR_IND, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
 
 DRE_DFP_CON = pd.DataFrame()
 path = './input_cvm/dfp/dre_cia_aberta_con_'
-for year in range(2015,2020,1):
-    DRE_DFP_CON = pd.concat([DRE_DFP_CON, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
+for year in range(yearStart,yearEnd+1,1):
+    if os.path.exists(path+str(year)+'.csv'):
+        DRE_DFP_CON = pd.concat([DRE_DFP_CON, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
 
 DRE_DFP_IND = pd.DataFrame()
 path = './input_cvm/dfp/dre_cia_aberta_ind_'
-for year in range(2015,2020,1):
-    DRE_DFP_IND = pd.concat([DRE_DFP_IND, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
+for year in range(yearStart,yearEnd+1,1):
+    if os.path.exists(path+str(year)+'.csv'):
+        DRE_DFP_IND = pd.concat([DRE_DFP_IND, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
 
 DRE=pd.concat([DRE_ITR_CON,DRE_DFP_CON,DRE_ITR_IND,DRE_DFP_IND])
 
@@ -124,10 +131,11 @@ DRE['ESCALA'] = DRE.ESCALA_MOEDA.map({'MIL': 1000, 'MILHAR': 1000, 'UNIDADE': 1}
 DRE.DT_INI_EXERC=pd.to_datetime(DRE.DT_INI_EXERC)
 #FIM
 DRE.DT_FIM_EXERC=pd.to_datetime(DRE.DT_FIM_EXERC)
-#Drop ORDEM_EXERC==PENÚLTIMO
-DRE=DRE[DRE.ORDEM_EXERC=='ÚLTIMO']
+#DATA DE REF
+DRE.DT_REFER=pd.to_datetime(DRE.DT_REFER)
+
 #Drop colunas desnecessárias
-DRE.drop(['DT_REFER', 'VERSAO', 'ESCALA_MOEDA', 'MOEDA', 'ORDEM_EXERC', 'DS_CONTA'], axis=1, inplace=True)
+DRE.drop(['VERSAO', 'ESCALA_MOEDA', 'MOEDA', 'DS_CONTA'], axis=1, inplace=True)
 
 ListOfCias = DRE[['CD_CVM', 'DENOM_CIA', 'CNPJ_CIA']].drop_duplicates()
 ListOfCias.sort_values('DENOM_CIA', inplace=True)
@@ -135,10 +143,6 @@ ListOfCias.reset_index(inplace=True, drop=True)
 ListOfCias.to_csv('./output_cvm/list_of_cias.csv')
 print('- Saved list_of_cias.csv')
 
-# %% [markdown]
-# Definido o trimestre correspondente de cada dado
-
-# %%
 def getTrim(month):
     if(month==2 or month==3):
         return 1
@@ -204,18 +208,30 @@ def calculateMarginTTM(r):
         else:
             return np.nan
 
+def isMostUpdated(r, dataFrame):
+    sameDataTable = dataFrame[(dataFrame.CD_CVM == r.CD_CVM)&(dataFrame.GRUPO_DFP == r.GRUPO_DFP) & (dataFrame.DESC_SIMPLES==r.DESC_SIMPLES) & (dataFrame.YEAR == r.YEAR) & (dataFrame.TRIM == r.TRIM) & (dataFrame.DAYS == r.DAYS)]
+    if(len(sameDataTable)==1):
+        return True
+    else: 
+        dataRefs = sameDataTable.DT_REFER.sort_values(ascending=False)
+    return (r.DT_REFER - dataRefs.values[0]).days == 0
+
 numberOfCVM = DRE.CD_CVM.nunique()
 count=0
 
-for cvm in DRE.CD_CVM.unique()[0:0]:
+for cvm in DRE.CD_CVM.unique():
     count=count+1
     print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
-    # cvm = 1023
+    # cvm=9512
     DF = DRE[(DRE.CD_CVM==cvm)]
     for grupo in ['Individual', 'Consolidado']:
         print('Grupo: ' + grupo)
         df = DF[DF.GRUPO_DFP == grupo]
         if(len(df)):
+            #Filter to only show mostUpdated rows
+            df['isMostUpdated']=df.apply(lambda r: isMostUpdated(r,df),axis=1)
+            df = df[df.isMostUpdated == True]
+
             df = df.sort_values(['DESC_SIMPLES','DT_INI_EXERC', 'DT_FIM_EXERC'])
             df.reset_index(inplace=True, drop=True)
             
@@ -232,7 +248,7 @@ for cvm in DRE.CD_CVM.unique()[0:0]:
                     TRIM_VL.append(np.nan)
             df['TRIM_VL'] = TRIM_VL
             #Drop DT_FIM_EXERC e DT_INI_EXERC
-            df.drop(['DT_FIM_EXERC', 'DT_INI_EXERC', 'DAYS', 'CNPJ_CIA'], axis=1, inplace=True)
+            df.drop(['DT_FIM_EXERC', 'DT_INI_EXERC', 'DAYS', 'CNPJ_CIA', 'DT_REFER', 'isMostUpdated'], axis=1, inplace=True)
             
             #Sort para garantir o sequenciamento correto
             df = df.sort_values(['DESC_SIMPLES', 'YEAR','TRIM']).reset_index(drop=True)

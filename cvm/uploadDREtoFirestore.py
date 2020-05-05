@@ -5,7 +5,7 @@ from uploadToFirestore import uploadDocumentToFirestore
 
 ### UPLOAD DOCUMENTS TO FIRESTORE ####
 print('STEP4 - UPLOADING DATA TO FIRESTORE')
-path_to_output_folder = './output_cvm/dre/'
+path_to_output_folder = 'cvm/output_cvm/dre/'
 cvm_folders = [cvm_folder for cvm_folder in os.listdir(path_to_output_folder)]
 total = len(cvm_folders)
 count=0

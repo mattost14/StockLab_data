@@ -40,7 +40,7 @@ def atualizar_package(zip_file_url, document):
     
 # ----- Informações Trimestrais -----
 def checkPackages(document):
-
+    # Documentação da API    https://docs.ckan.org/en/ckan-2.6.0/api/
     url = 'http://dados.cvm.gov.br/api/3/action/package_search'
     # ------ Checking input_log -----
     input_log = pd.read_csv('input_cvm/input_log.csv')
@@ -89,10 +89,10 @@ def checkPackages(document):
     input_log.to_csv('input_cvm/input_log.csv', index=False)
 
 if __name__ == "__main__":  
-    # checkPackages('cia_aberta-doc-itr')
-    # checkPackages('cia_aberta-doc-dfp-dre')
+    checkPackages('cia_aberta-doc-itr')
+    checkPackages('cia_aberta-doc-dfp-dre')
     # checkPackages('cia_aberta-doc-dfp-bpa')
-    checkPackages('cia_aberta-doc-dfp-bpp')
+    # checkPackages('cia_aberta-doc-dfp-bpp')
 #print('Novo log:')
 #print(input_log)
 
