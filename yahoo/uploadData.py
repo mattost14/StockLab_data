@@ -11,6 +11,7 @@ path_to_output_dividends = 'yahoo/output/dividends/'
 
 if __name__ == "__main__":
     # target = 'dividends'
+    print('Start uploading to Firestore ...')
     target = 'quotes'
     if(target == 'quotes'):
         path = path_to_output_historical
