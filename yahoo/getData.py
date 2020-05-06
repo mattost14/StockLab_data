@@ -117,7 +117,7 @@ if __name__ == "__main__":
     l = getCrumb()
     numOfTickers = len(allTickers)
     count=0
-    for ticker in allTickers:
+    for ticker in allTickers[0:1]:
         count=count+1
         print('  ' + str(count) + '/' + str(numOfTickers) + ' - ' + ticker)
         time.sleep(5)

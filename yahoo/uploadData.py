@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     csv_files = [pos_csv for pos_csv in os.listdir(path) if pos_csv.endswith('.csv')]
     for file in csv_files:
-        # if(file == 'EMBR3.csv'):
+        if(file == 'AALR3.csv'):
             df = pd.read_csv(path+file)
             if(df.empty == False):
                 ticker = file.split('.')[0]
