@@ -10,7 +10,7 @@ path_to_output_dividends = 'yahoo/output/dividends/'
 
 
 def uploadQuotes(df, ticker, target):
-    print('Uploading '+ target + ' of ' + ticker + ' to Firestore:')
+    # print('Uploading '+ target + ' of ' + ticker + ' to Firestore:')
     #Get last 1 week
     delta = dt.datetime.today() - df.Date
     delta = delta.map(lambda d : d.days) 
@@ -26,7 +26,7 @@ def uploadQuotes(df, ticker, target):
             'ticker': ticker,
             'data': []
         }
-    print(' - Last 1 week...')
+    # print(' - Last 1 week...')
     uploadDocumentFromJsonData(target, jsonData, 'last1w/'+ticker+'/data')
     
     #Get last 1 month
@@ -44,7 +44,7 @@ def uploadQuotes(df, ticker, target):
             'ticker': ticker,
             'data': []
         }
-    print(' - Last month...')
+    # print(' - Last month...')
     uploadDocumentFromJsonData(target, jsonData, 'last1m/'+ticker+'/data')
 
     #Get last 6 months
@@ -62,7 +62,7 @@ def uploadQuotes(df, ticker, target):
             'ticker': ticker,
             'data': []
         }
-    print(' - Last 6 months...')
+    # print(' - Last 6 months...')
     uploadDocumentFromJsonData(target, jsonData, 'last6m/'+ticker+'/data')
     
     #Get last 1 year
@@ -80,7 +80,7 @@ def uploadQuotes(df, ticker, target):
             'ticker': ticker,
             'data': []
         }
-    print(' - Last 1 year...')
+    # print(' - Last 1 year...')
     uploadDocumentFromJsonData(target, jsonData, 'last1yr/'+ticker+'/data')
 
     #Get last 2 years
@@ -98,7 +98,7 @@ def uploadQuotes(df, ticker, target):
             'ticker': ticker,
             'data': []
         }
-    print(' - Last 2 years...')
+    # print(' - Last 2 years...')
     uploadDocumentFromJsonData(target, jsonData, 'last2yr/'+ticker+'/data')
 
     #Get last 5 years
@@ -116,7 +116,7 @@ def uploadQuotes(df, ticker, target):
             'ticker': ticker,
             'data': []
         }
-    print(' - Last 5 years...')
+    # print(' - Last 5 years...')
     uploadDocumentFromJsonData(target, jsonData, 'last5yr/'+ticker+'/data')
 
 def uploadDividends(df, ticker, target):

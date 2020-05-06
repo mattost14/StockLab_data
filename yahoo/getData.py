@@ -127,7 +127,7 @@ if __name__ == "__main__":
     for ticker in allTickers[0:1]:
         count=count+1
         print('  ' + str(count) + '/' + str(numOfTickers) + ' - ' + ticker)
-        time.sleep(5)
+        # time.sleep(5)
         #print(' - historical:')
         flag=updateDailyDataBase(ticker, l, 'historical')
         if flag == 'Sucesso':
