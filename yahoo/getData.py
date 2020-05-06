@@ -6,6 +6,7 @@ import os, io
 import json
 import pandas as pd
 from datetime import datetime, timedelta
+from uploadData import uploadTicker
 
 
 inputfile = 'b3/output_b3/dados_cia.json'
@@ -76,6 +77,10 @@ def downloadData(ticker, period1, period2, interval, event, crumb, cookies):
             newdata.Date = pd.to_datetime(newdata.Date)
             newdata=newdata.sort_values('Date').reset_index(drop=True)
             newdata.to_csv(path, index=False)
+        
+        return 'Sucesso'
+    else:
+        return 'Falhou'
 
 
 def getLastDayInDataBase(ticker, database):
@@ -100,10 +105,12 @@ def updateDailyDataBase(ticker, l, database):
     period2 = round((hoje-refDate).total_seconds())
 
     if (period2-period1)/3600 > 24:
-       # print(' - atualizando dados para: ' + ticker)
-        downloadData(ticker, period1, period2, '1d', database, l['crumb'], l['cookies'])
-    # else:
-        #print( '   ' + ticker + ' - já atualizado no banco de dados DAILY.')
+        flag = downloadData(ticker, period1, period2, '1d', database, l['crumb'], l['cookies'])
+    else:
+        flag = 'Já Atualizado'
+
+    return flag
+
 if __name__ == "__main__":
     agora = datetime.now() - timedelta(hours=3)
     print(' - Atualização iniciada em: '+ str(agora)) 
@@ -122,8 +129,18 @@ if __name__ == "__main__":
         print('  ' + str(count) + '/' + str(numOfTickers) + ' - ' + ticker)
         time.sleep(5)
         #print(' - historical:')
-        updateDailyDataBase(ticker, l, 'historical')
-        #print(' - dividends:')
-        updateDailyDataBase(ticker, l, 'dividends')
+        flag=updateDailyDataBase(ticker, l, 'historical')
+        if flag == 'Sucesso':
+            uploadTicker(ticker, 'quotes')
+            print('     Cotação - '+ ticker+': '+flag) 
+        else:
+            print('     Cotação - '+ ticker+': '+flag) 
+        
+        flag=updateDailyDataBase(ticker, l, 'dividends')
+        if flag == 'Sucesso':
+            uploadTicker(ticker, 'dividends')
+            print('     Dividendos - '+ ticker+': '+flag) 
+        else:
+            print('     Dividendos - '+ ticker+': '+flag) 
     termino = datetime.now() - timedelta(hours=3)
     print(' - Atualização completada em: '+ str(termino)) 
