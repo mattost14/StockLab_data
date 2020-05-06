@@ -1,6 +1,7 @@
 import sys, os
 import pandas as pd
 import datetime as dt
+import syslog
 sys.path.append('Firestore')
 from uploadToFirestore import uploadDocumentFromJsonData
 
@@ -11,7 +12,7 @@ path_to_output_dividends = 'yahoo/output/dividends/'
 
 if __name__ == "__main__":
     # target = 'dividends'
-    print('Start uploading to Firestore ...')
+    syslog.syslog('Start uploading to Firestore ...')
     target = 'quotes'
     if(target == 'quotes'):
         path = path_to_output_historical
