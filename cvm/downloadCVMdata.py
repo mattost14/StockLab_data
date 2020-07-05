@@ -44,19 +44,24 @@ def checkPackages(document):
     url = 'http://dados.cvm.gov.br/api/3/action/package_search'
     # ------ Checking input_log -----
     input_log = pd.read_csv('input_cvm/input_log.csv')
-    print('Log atual:')
-    print(input_log)
+    # print('Log atual:')
+    # print(input_log)
 
     response = requests.get(url, params={'q': document})
     data = response.json()
     results = data['result']['results'][0]
     num = results['num_resources']
     resources = results['resources']
+    print(num)
+    # print(resources)
+
     for i in range(0,num):
         #Check whether there is the same package in the input_log
         package_id = resources[i]['package_id']
+        resource_id = resources[i]['id']
         name = resources[i]['name']
         last_modified = resources[i]['last_modified']
+        revision_id = resources[i]['revision_id']
         if any(input_log.name == name):
             #Checking if it is updated
             if(last_modified):
@@ -69,6 +74,7 @@ def checkPackages(document):
                     if ans: #Substituindo package desatualizado pelo atualizado
                         zip_file_url = resources[i]['url']
                         atualizar_package(zip_file_url, document)
+                        input_log.loc[(input_log.name == name).index, 'revision_id']=revision_id
                         input_log.loc[(input_log.name == name).index, 'atualizado']=True
                         input_log.loc[(input_log.name == name).index, 'last_modified']=package_date
                         print('Package atualizado.')
@@ -81,18 +87,17 @@ def checkPackages(document):
             if ans:
                 zip_file_url = resources[i]['url']
                 atualizar_package(zip_file_url, document)
-                revision_id = resources[i]['revision_id']
                 created = resources[i]['created']
-                input_log=input_log.append(pd.Series([package_id,name, pd.Timestamp(created), pd.Timestamp(last_modified), revision_id, zip_file_url, True], index=['package_id','name', 'created',  'last_modified', 'revision_id', 'zip_file_url', 'atualizado']), ignore_index=True)
+                input_log=input_log.append(pd.Series([resource_id, name, pd.Timestamp(created), pd.Timestamp(last_modified), revision_id, zip_file_url, True], index=['package_id','name', 'created',  'last_modified', 'revision_id', 'zip_file_url', 'atualizado']), ignore_index=True)
     #Save new input_log
     print('Registrando alterações no log.')
     input_log.to_csv('input_cvm/input_log.csv', index=False)
 
 if __name__ == "__main__":  
-    checkPackages('cia_aberta-doc-itr')
-    checkPackages('cia_aberta-doc-dfp-dre')
+    # checkPackages('cia_aberta-doc-itr')
+    # checkPackages('cia_aberta-doc-dfp-dre')
     checkPackages('cia_aberta-doc-dfp-bpa')
-    checkPackages('cia_aberta-doc-dfp-bpp')
+   # checkPackages('cia_aberta-doc-dfp-bpp')
 #print('Novo log:')
 #print(input_log)
 

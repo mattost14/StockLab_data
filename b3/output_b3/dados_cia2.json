@@ -1,0 +1,426 @@
+{
+  "dados_cia": {
+    "24953": {
+      "capital_social": NaN, 
+      "site": null, 
+      " cvm": 24953, 
+      "free_float_Total": 10.12, 
+      "qtd_acoes_pn": NaN, 
+      "seg_mercado": NaN, 
+      "razao_social": NaN, 
+      "acionistas": [
+        {
+          "%PN": 0.0, 
+          "%Total": 1.8, 
+          "%ON": 1.8, 
+          "Nome": "Tsemf Iv Brazil S.A.r.l"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 39.68, 
+          "%ON": 39.68, 
+          "Nome": "Fundo de Investimento em Participa\u00e7\u00f5es Maranello - Multiestrat\u00e9gia"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 29.26, 
+          "%ON": 29.26, 
+          "Nome": "Riverside Fundo de Investimento em Participa\u00e7\u00f5es Multiestrat\u00e9gia"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 9.22, 
+          "%ON": 9.22, 
+          "Nome": "Fip Brasil de Governan\u00e7a Corporativa"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 3.12, 
+          "%ON": 3.12, 
+          "Nome": "Tsemf Iii Brazil S.A.r.l."
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 6.8, 
+          "%ON": 6.8, 
+          "Nome": "Fundo de Investimento Multimercado Cr\u00e9dito Privado Valbuena"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 10.12, 
+          "%ON": 10.12, 
+          "Nome": "Outros"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 0.0, 
+          "%ON": 0.0, 
+          "Nome": "A\u00e7\u00f5es Tesouraria"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 100.0, 
+          "%ON": 100.0, 
+          "Nome": "Total"
+        }
+      ], 
+      "participacao_gov": false, 
+      "segmento": "Servi\u00e7os Diversos", 
+      "qtd_acoes_total": NaN, 
+      "qtd_acoes_on": NaN, 
+      "cnpj": "60.537.263/0001-66", 
+      "short_name": NaN, 
+      "subsetor": "Servi\u00e7os", 
+      "atividade_principal": "Outras Atividades de Publicidade N\u00e3o Especificadas Anteriormente; Gest\u00e3o de Ativos Intang\u00edveis N\u00e3o-financeiros; Outras Atividades de Servi\u00e7os Pessoais N\u00e3o Especificadas Anteriormente.", 
+      "ticker": "ALPK", 
+      "list_of_tickers": [
+        "ALPK3"
+      ], 
+      "img": "588.jpg", 
+      "free_float_PN": 0.0, 
+      "free_float_ON": 10.12, 
+      "setor": "Bens Industriais", 
+      "nome_pregao": "ESTAPAR", 
+      "tipo_capital": NaN
+    }, 
+    "24902": {
+      "capital_social": 1014824026.0, 
+      "site": null, 
+      " cvm": 24902, 
+      "free_float_Total": 43.44, 
+      "qtd_acoes_pn": 0.0, 
+      "seg_mercado": "NOVO MERCADO", 
+      "razao_social": "MITRE REALTY EMPREENDIMENTOS E PARTICIPA\u00c7\u00d5ES S.A.", 
+      "acionistas": [
+        {
+          "%PN": 0.0, 
+          "%Total": 3.22, 
+          "%ON": 3.22, 
+          "Nome": "Jorge Mitre"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 7.68, 
+          "%ON": 7.68, 
+          "Nome": "Capital Research Global Investors"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 21.92, 
+          "%ON": 21.92, 
+          "Nome": "Fabricio Mitre"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 3.83, 
+          "%ON": 3.83, 
+          "Nome": "Mitre Partners Participa\u00e7\u00f5es Ltda."
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 19.91, 
+          "%ON": 19.91, 
+          "Nome": "Star Mitre Empreendimentos E Participa\u00e7\u00f5es Ltda."
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 43.44, 
+          "%ON": 43.44, 
+          "Nome": "Outros"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 0.0, 
+          "%ON": 0.0, 
+          "Nome": "A\u00e7\u00f5es Tesouraria"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 100.0, 
+          "%ON": 100.0, 
+          "Nome": "Total"
+        }
+      ], 
+      "participacao_gov": false, 
+      "segmento": "Incorpora\u00e7\u00f5es", 
+      "qtd_acoes_total": 105774820.0, 
+      "qtd_acoes_on": 105774820.0, 
+      "cnpj": "07.882.930/0001-65", 
+      "short_name": "MITRE REALTY", 
+      "subsetor": "Constru\u00e7\u00e3o Civil", 
+      "atividade_principal": "(a) Incorpora\u00e7\u00e3o E Comercializa\u00e7\u00e3o de Empreendimentos Imobili\u00e1rios de Qualquer Natureza. (b) Loteamento de Terrenos. (c) Constru\u00e7\u00e3o de Condom\u00ednios", 
+      "ticker": "MTRE", 
+      "list_of_tickers": [
+        "MTRE3"
+      ], 
+      "img": "576.jpg", 
+      "free_float_PN": 0.0, 
+      "free_float_ON": 43.44, 
+      "setor": "Consumo C\u00edclico", 
+      "nome_pregao": "MITRE REALTY", 
+      "tipo_capital": "Homologado"
+    }, 
+    "22357": {
+      "capital_social": 4190769244.0, 
+      "site": "www.sonaesierra.com.br", 
+      " cvm": 22357, 
+      "free_float_Total": 51.21, 
+      "qtd_acoes_pn": 0.0, 
+      "seg_mercado": "NOVO MERCADO", 
+      "razao_social": "ALIANSCE SONAE SHOPPING CENTERS S.A.", 
+      "acionistas": [
+        {
+          "%PN": 0.0, 
+          "%Total": 12.86, 
+          "%ON": 12.86, 
+          "Nome": "Cura Brazil S.\u00e0 R.l."
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 2.45, 
+          "%ON": 2.45, 
+          "Nome": "Fundo de Investimentos em Participa\u00e7\u00f5es Bali"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 3.24, 
+          "%ON": 3.24, 
+          "Nome": "Rique Empreendimentos E Participa\u00e7\u00f5es Ltda.."
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 0.5, 
+          "%ON": 0.5, 
+          "Nome": "Rfr Empreendimentos E Participa\u00e7\u00f5es S.A."
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 0.48, 
+          "%ON": 0.48, 
+          "Nome": "Renato Feitosa Rique"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 5.43, 
+          "%ON": 5.43, 
+          "Nome": "Cppib Flamengo Us Llc"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 17.53, 
+          "%ON": 17.53, 
+          "Nome": "Canada Pension Plan Investment Board"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 6.3, 
+          "%ON": 6.3, 
+          "Nome": "Sierra Brazil 1 S.\u00e0 R.l."
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 51.21, 
+          "%ON": 51.21, 
+          "Nome": "Outros"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 0.0, 
+          "%ON": 0.0, 
+          "Nome": "A\u00e7\u00f5es Tesouraria"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 100.0, 
+          "%ON": 100.0, 
+          "Nome": "Total"
+        }
+      ], 
+      "participacao_gov": false, 
+      "segmento": "Explora\u00e7\u00e3o de Im\u00f3veis", 
+      "qtd_acoes_total": 265772778.0, 
+      "qtd_acoes_on": 265772778.0, 
+      "cnpj": "05.878.397/0001-32", 
+      "short_name": "ALIANSCSONAE", 
+      "subsetor": "Explora\u00e7\u00e3o de Im\u00f3veis", 
+      "atividade_principal": "Planejamento. Desenvolvimento. Implanta\u00e7\u00e3o E Investimentos Na \u00e1rea Imobili\u00e1ria. Nomeadamente em Shopping Centers E A Participa\u00e7\u00e3o em Outras Sociedades E/ou em Fundos de Investimento Imobili\u00e1rio.", 
+      "ticker": "ALSO", 
+      "list_of_tickers": [
+        "ALSO3"
+      ], 
+      "img": "315.jpg", 
+      "free_float_PN": 0.0, 
+      "free_float_ON": 51.21, 
+      "setor": "Financeiro", 
+      "nome_pregao": "ALIANSCSONAE", 
+      "tipo_capital": "Homologado"
+    }, 
+    "24910": {
+      "capital_social": 630558520.64, 
+      "site": null, 
+      " cvm": 24910, 
+      "free_float_Total": 48.12, 
+      "qtd_acoes_pn": 0.0, 
+      "seg_mercado": "NOVO MERCADO", 
+      "razao_social": "LOCAWEB SERVI\u00c7OS DE INTERNET S.A.", 
+      "acionistas": [
+        {
+          "%PN": 0.0, 
+          "%Total": 7.8, 
+          "%ON": 7.8, 
+          "Nome": "Michel Gora"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 7.8, 
+          "%ON": 7.8, 
+          "Nome": "Ricardo Gora"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 3.46, 
+          "%ON": 3.46, 
+          "Nome": "Andrea Gora Cohen"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 7.8, 
+          "%ON": 7.8, 
+          "Nome": "Gilberto Mautner"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 7.8, 
+          "%ON": 7.8, 
+          "Nome": "Claudio Gora"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 6.49, 
+          "%ON": 6.49, 
+          "Nome": "Gic Private Limited"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 5.67, 
+          "%ON": 5.67, 
+          "Nome": "Fourth Sail Capital Lp"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 5.05, 
+          "%ON": 5.05, 
+          "Nome": "Blackrock. Inc"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 48.12, 
+          "%ON": 48.12, 
+          "Nome": "Outros"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 0.01, 
+          "%ON": 0.01, 
+          "Nome": "A\u00e7\u00f5es Tesouraria"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 100.0, 
+          "%ON": 100.0, 
+          "Nome": "Total"
+        }
+      ], 
+      "participacao_gov": false, 
+      "segmento": "Programas e Servi\u00e7os", 
+      "qtd_acoes_total": 125172486.0, 
+      "qtd_acoes_on": 125172486.0, 
+      "cnpj": "02.351.877/0001-52", 
+      "short_name": "LOCAWEB", 
+      "subsetor": "Programas e Servi\u00e7os", 
+      "atividade_principal": null, 
+      "ticker": "LWSA", 
+      "list_of_tickers": [
+        "LWSA3"
+      ], 
+      "img": "577.jpg", 
+      "free_float_PN": 0.0, 
+      "free_float_ON": 48.12, 
+      "setor": "Tecnologia da Informa\u00e7\u00e3o", 
+      "nome_pregao": "LOCAWEB", 
+      "tipo_capital": "Homologado"
+    }, 
+    "11975": {
+      "capital_social": 28047137.15, 
+      "site": "www.azevedotravassos.com.br", 
+      " cvm": 11975, 
+      "free_float_Total": 44.6, 
+      "qtd_acoes_pn": 3600000.0, 
+      "seg_mercado": "TRADICIONAL", 
+      "razao_social": "AZEVEDO E TRAVASSOS S.A.", 
+      "acionistas": [
+        {
+          "%PN": 8.37, 
+          "%Total": 26.52, 
+          "%ON": 62.8, 
+          "Nome": "Rocket Empreendimentos E Participa\u00e7\u00f5es S.A."
+        }, 
+        {
+          "%PN": 5.19, 
+          "%Total": 3.46, 
+          "%ON": 0.0, 
+          "Nome": "Pedro Leite Capeto"
+        }, 
+        {
+          "%PN": 22.73, 
+          "%Total": 22.09, 
+          "%ON": 20.82, 
+          "Nome": "Lagro Do Brasil Participa\u00e7oes Ltda"
+        }, 
+        {
+          "%PN": 5.0, 
+          "%Total": 3.33, 
+          "%ON": 0.0, 
+          "Nome": "Paulo Henrique Dos Santos"
+        }, 
+        {
+          "%PN": 58.7, 
+          "%Total": 44.6, 
+          "%ON": 16.38, 
+          "Nome": "Outros"
+        }, 
+        {
+          "%PN": 0.0, 
+          "%Total": 0.0, 
+          "%ON": 0.0, 
+          "Nome": "A\u00e7\u00f5es Tesouraria"
+        }, 
+        {
+          "%PN": 100.0, 
+          "%Total": 100.0, 
+          "%ON": 100.0, 
+          "Nome": "Total"
+        }
+      ], 
+      "participacao_gov": false, 
+      "segmento": "Constru\u00e7\u00e3o Pesada", 
+      "qtd_acoes_total": 5400000.0, 
+      "qtd_acoes_on": 1800000.0, 
+      "cnpj": "61.351.532/0001-68", 
+      "short_name": "AZEVEDO", 
+      "subsetor": "Constru\u00e7\u00e3o e Engenharia", 
+      "atividade_principal": "Execu\u00e7\u00e3o de Obras de Constru\u00e7\u00e3o Pesada Junto A Org\u00e3os P\u00fablicos", 
+      "ticker": "AZEV", 
+      "list_of_tickers": [
+        "AZEV3", 
+        "AZEV4"
+      ], 
+      "img": "163.jpg", 
+      "free_float_PN": 58.7, 
+      "free_float_ON": 16.38, 
+      "setor": "Bens Industriais", 
+      "nome_pregao": "AZEVEDO", 
+      "tipo_capital": "Homologado"
+    }
+  }
+}

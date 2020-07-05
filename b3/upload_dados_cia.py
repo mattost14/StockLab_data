@@ -4,7 +4,7 @@ import sys
 sys.path.append('/Users/BrunoMattos/Documents2/Dev/stocklab_data/Firestore')
 from uploadToFirestore import uploadDocumentFromJsonData
 
-inputfile = './output_b3/dados_cia.json'
+inputfile = 'b3/output_b3/dados_cia2.json'
 collectionID = 'dados_cia'
 
 with open(inputfile) as file:
@@ -28,6 +28,7 @@ def generateKeywords(nome, ticker):
 
 
 df['keywords'] = df.apply(lambda row: generateKeywords(row.nome_pregao, row.ticker), axis=1)
+df['list_of_tickers_onmarket'] = df['list_of_tickers']
 #print(df[['nome_pregao','img', 'ticker', 'list_of_tickers']].head(4))
 # print(df.head(5).to_dict(orient='index'))
 # print(df)

@@ -9,11 +9,11 @@ import json
 import pandas as pd
 import datetime as dt
 from datetime import datetime, timedelta
-from uploadData import uploadTicker
+# from uploadData import uploadTicker
 
 
-# cred = credentials.Certificate("yahoo/serviceAccountKey-US.json")
-# firebase_admin.initialize_app(cred)
+cred = credentials.Certificate("yahoo/serviceAccountKey-US.json")
+firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 PROJECT_NAME = 'stocklab-8255c'
@@ -241,8 +241,8 @@ def updateDailyDataBase(ticker, l):
         period1 = round((lastday-refDate).total_seconds())
         period2 = round((hoje-refDate).total_seconds())
         [newdata, flag] = downloadNewData(ticker, period1, period2, '1d','history', l['crumb'], l['cookies'])
-        
         if(flag):
+            
             newdata.Date=pd.to_datetime(newdata.Date)
             #Drop row if Volume=0
             indexRows = newdata[ newdata['Volume'] == 0 ].index
@@ -251,22 +251,30 @@ def updateDailyDataBase(ticker, l):
             newdata.dropna(inplace=True)
             newdata.reset_index(inplace=True, drop=True)
             newdata.Date = newdata.Date.apply(lambda d: d.replace(hour=12))
-
             lastData = pd.DataFrame(data['data'])
-            if(len(newdata)!=0):          
+            # print(lastData)
+            if(len(newdata)!=0):         
                 if(lastData.empty):
                     check = uploadQuotes(newdata, ticker)
                 else:    
                     lastData.Date = lastData.Date.dt.strftime('%Y-%m-%d')
+                    lastData.Date=pd.to_datetime(lastData.Date)
+                    lastData.Date = lastData.Date.apply(lambda d: d.replace(hour=12))
                     updatedData = newdata.append(lastData, ignore_index=True, sort=True)
                     check = uploadQuotes(updatedData, ticker)
                 if(check):
+                    print('Updated')
                     return True
                 else:
+                    print('Error during uploadQuotes')
                     return False
             elif lastData.empty:
+                print('lastData is empty')
                 return False
+            else:
+                print('newdata is empty')
         else:
+            print('Error during download new data')
             return False
     else:
         print('        '+ 'Já Atualizado')
@@ -290,7 +298,11 @@ if __name__ == "__main__":
     for doc in docs:
         d = doc.to_dict()
         tickers = d['list_of_tickers']
+        # tickers = d['list_of_tickers_onmarket']
         dados_cia.append({"id": doc.id, "tickers": tickers})
+    
+    countError = 0
+    list_of_tickers_error = []
     for cia in dados_cia:
         list_of_tickers_onmarket = []
         tickers = cia['tickers']
@@ -298,11 +310,17 @@ if __name__ == "__main__":
             flag = updateDailyDataBase(ticker, l)
             if(flag):
                 list_of_tickers_onmarket.append(ticker)
+            else:
+                countError = countError + 1
+                list_of_tickers_error.append(ticker)
         try:
             db.collection('dados_cia').document(cia['id']).set({'list_of_tickers_onmarket': list_of_tickers_onmarket}, True)
         except:
             print('Ops')
         print(str(tickers) +' -> '+ str(list_of_tickers_onmarket))
+    
+    print('FINISH - número de erros: ' + str(countError))
+    print(str(list_of_tickers_error))
 
     # allTickers = extractListOfTickers()
     # l = getCrumb()

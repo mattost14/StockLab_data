@@ -166,15 +166,16 @@ def uploadTicker(ticker, target):
 if __name__ == "__main__":
     # target = 'dividends'
     print('Start uploading to Firestore ...')
-    target = 'quotes'
-    # if(target == 'quotes'):
-    #     path = path_to_output_historical
-    # elif(target == 'dividends'):
-    #     path = path_to_output_dividends
+    target = 'dividends'
+    if(target == 'quotes'):
+        path = path_to_output_historical
+    elif(target == 'dividends'):
+        path = path_to_output_dividends
 
     csv_files = [pos_csv for pos_csv in os.listdir(path) if pos_csv.endswith('.csv')]
     for file in csv_files:
         ticker = file.split('.')[0]
+        print(ticker)
         uploadTicker(ticker, target)
         # if(file == 'AALR3.csv'):
             # df = pd.read_csv(path+file)

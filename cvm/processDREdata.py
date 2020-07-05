@@ -13,60 +13,76 @@ pd.options.mode.chained_assignment = None
 itr_input = './input_cvm/itr/'
 dfp_input = './input_cvm/dfp/'
 
+#All cvm not included on this list will be ignored
+listOfCVM = pd.read_csv('input_cvm/listOfCVM.csv')
+listOfCVM=listOfCVM.CVM.values
+
 yearStart = 2015
 yearEnd = 2020
 # print(os.listdir("./input_cvm/itr"))
-
 
 # %%
 MapaNiveis = {
     'Receita Líquida' : 1,
     'Custos': 2,
     'Lucro Bruto':3,
-    'Despesas/Receitas Operacionais':4,
-    'EBITDA': 5,
-    'Amortização/Depreciação': 6,
+    'Despesas Administrativas':4,
+        'Despesas com Vendas': 4.1,
+        'Despesas Gerais e Administrativas': 4.2,
+    'Despesas/Receitas Operacionais':5,
+    'Resultado de Equivalência Patrimonial':6,
     'EBIT' : 7,
-    'Resultado Financeiro': 8,
-        'Receitas Financeiras': 8.1,
-        'Despesas Financeiras': 8.2,
-    'EBT': 9,
-    'Impostos':10,
-    'Lucro Líquido': 11,
+    'Resultado Operacional':8,
+    'Resultado Não Operacional':9,
+    'Resultado Financeiro': 10,
+        'Receitas Financeiras': 10.1,
+        'Despesas Financeiras': 10.2,
+    'EBT': 11,
+    'Impostos':12,
+    'Lucro Líquido': 13,
 }
+
 MapNivel2 = {
     #1
-    'Receitas da Intermediação Financeira' : 'Receita Líquida',
-    'Receitas das Operações' : 'Receita Líquida',
-    'Receita de Venda de Bens e/ou Serviços': 'Receita Líquida',
+    'Receitas da Intermediação Financeira' : 'Receita Líquida', #Bancos (Ex.: ITAU)
+    'Receitas das Operações' : 'Receita Líquida', #Seguradoras (Ex.:BBSE)
+    'Receita de Venda de Bens e/ou Serviços': 'Receita Líquida', #Geral (Ex.: Vale)
     #2
-    'Despesas da Intermediação Financeira': 'Custos',
-    'Custo dos Bens e/ou Serviços Vendidos': 'Custos',
-    'Sinistros e Despesas das Operações':'Custos',
+    'Despesas da Intermediação Financeira': 'Custos', #Bancos (Ex.: ITAU)
+    'Sinistros e Despesas das Operações':'Custos', #Seguradoras (Ex.:BBSE)
+    'Custo dos Bens e/ou Serviços Vendidos': 'Custos', #Geral (Ex.: Vale)
     #3
-    'Resultado Bruto': 'Lucro Bruto',
-    'Resultado Bruto Intermediação Financeira': 'Lucro Bruto',
+    'Resultado Bruto': 'Lucro Bruto', #Geral (Ex.: Vale) e Seguradoras (Ex.:BBSE)
+    'Resultado Bruto Intermediação Financeira': 'Lucro Bruto', #Bancos (Ex.: ITAU)
     #4
-    'Despesas/Receitas Operacionais': 'Despesas/Receitas Operacionais',
-    'Despesas Administrativas': 'Despesas/Receitas Operacionais',
-    'Outras Despesas/Receitas Operacionais': 'Despesas/Receitas Operacionais',
-    'Outras Receitas e Despesas Operacionais': 'Despesas/Receitas Operacionais',
+    'Despesas Administrativas': 'Despesas Administrativas', #Seguradoras (Ex.:BBSE)
+    #5
+    'Despesas/Receitas Operacionais': 'Despesas/Receitas Operacionais', #Geral (Ex.: Vale)
+    'Outras Despesas/Receitas Operacionais': 'Despesas/Receitas Operacionais', #Bancos (Ex.: ITAU)
+    'Outras Receitas e Despesas Operacionais': 'Despesas/Receitas Operacionais', #Seguradoras (Ex.:BBSE)
+    #6
+    'Resultado de Equivalência Patrimonial':'Resultado de Equivalência Patrimonial',#Seguradoras (Ex.:BBSE)
     #7
-    'Resultado Antes do Resultado Financeiro e dos Tributos' : 'EBIT',
-    'Resultado Operacional': 'EBIT',
+    'Resultado Antes do Resultado Financeiro e dos Tributos' : 'EBIT', #Geral (Ex.: Vale) e Seguradoras (Ex.:BBSE)
     #8
-    'Resultado Financeiro' : 'Resultado Financeiro',
-    # 'Resultado Não Operacional': 'Resultado Financeiro',
+    'Resultado Operacional': 'Resultado Operacional', #Bancos (Ex.: ITAU) (Individual)
     #9
-    'Resultado Antes dos Tributos sobre o Lucro': 'EBT',
+    'Resultado Não Operacional': 'Resultado Não Operacional', #Bancos (Ex.: ITAU) (Individual)
     #10
-    'Imposto de Renda e Contribuição Social sobre o Lucro': 'Impostos',
+    'Resultado Financeiro' : 'Resultado Financeiro', #Geral (Ex.: Vale) e Seguradoras (Ex.:BBSE)
     #11
-    'Lucro/Prejuízo Consolidado do Período' : 'Lucro Líquido',
-    'Lucro/Prejuízo do Período':'Lucro Líquido',
-    # 'Resultado Líquido das Operações Continuadas': 'Lucro Líquido'
+    'Resultado Antes dos Tributos sobre o Lucro': 'EBT', #Geral (Ex.: Vale) e Seguradoras (Ex.:BBSE) e Bancos (Ex.: ITAU) (Consolidado)
+    'Resultado Antes Tributação/Participações':'EBT', #Bancos (Ex.: ITAU) (Individual)
+    #12
+    'Imposto de Renda e Contribuição Social sobre o Lucro': 'Impostos', ##Geral (Ex.: Vale) e Seguradoras (Ex.:BBSE) e Bancos (Ex.: ITAU) (Consolidado)
+    'Provisão para IR e Contribuição Social': 'Impostos', #Bancos (Ex.: ITAU) (Individual)
+    #13
+    'Lucro/Prejuízo Consolidado do Período' : 'Lucro Líquido', #Geral (Ex.: Vale) e Seguradoras (Ex.:BBSE) e Bancos (Ex.: ITAU) 
+    'Lucro/Prejuízo do Período':'Lucro Líquido', #Geral (Ex.: Vale) e Seguradoras (Ex.:BBSE) e Bancos (Ex.: ITAU) 
 }
 MapNivel3 = {
+    'Despesas com Vendas': 'Despesas com Vendas',
+    'Despesas Gerais e Administrativas' : 'Despesas Gerais e Administrativas',
     'Receitas Financeiras': 'Receitas Financeiras',
     'Despesas Financeiras': 'Despesas Financeiras',
     #6
@@ -75,9 +91,8 @@ MapNivel3 = {
 MapGrupo = {
     'DF Individual - Demonstração do Resultado': 'Individual',
     'DF Consolidado - Demonstração do Resultado': 'Consolidado'
+
 }
-
-
 # %%
 DRE_ITR_CON = pd.DataFrame()
 path = './input_cvm/itr/itr_cia_aberta_dre_con_'
@@ -104,7 +119,8 @@ for year in range(yearStart,yearEnd+1,1):
         DRE_DFP_IND = pd.concat([DRE_DFP_IND, pd.read_csv(path+str(year)+'.csv', thousands=',', sep=';', encoding='latin-1')])
 
 DRE=pd.concat([DRE_ITR_CON,DRE_DFP_CON,DRE_ITR_IND,DRE_DFP_IND])
-
+#Apply filter by listOfCVM
+DRE = DRE[DRE.CD_CVM.isin(listOfCVM)]
 
 # %%
 #Adicionar column do nível do dado conforme columna CD_CONTA. Ex.: '3.04.02' -> nível 3
@@ -137,7 +153,7 @@ DRE.DT_REFER=pd.to_datetime(DRE.DT_REFER)
 #Drop colunas desnecessárias
 DRE.drop(['VERSAO', 'ESCALA_MOEDA', 'MOEDA', 'DS_CONTA'], axis=1, inplace=True)
 
-ListOfCias = DRE[['CD_CVM', 'DENOM_CIA', 'CNPJ_CIA']].drop_duplicates()
+ListOfCias = DRE[['CD_CVM', 'DENOM_CIA']].drop_duplicates('CD_CVM')
 ListOfCias.sort_values('DENOM_CIA', inplace=True)
 ListOfCias.reset_index(inplace=True, drop=True)
 ListOfCias.to_csv('./output_cvm/list_of_cias.csv')
@@ -216,13 +232,22 @@ def isMostUpdated(r, dataFrame):
         dataRefs = sameDataTable.DT_REFER.sort_values(ascending=False)
     return (r.DT_REFER - dataRefs.values[0]).days == 0
 
+def normalizeScale(row):
+    if row.ESCALA == 1:
+        return row.VL_CONTA/1000
+    else:
+        return row.VL_CONTA
+
+DRE.VL_CONTA = DRE.apply(lambda row: normalizeScale(row), axis =1 )
+DRE.ESCALA = 1000
+
 numberOfCVM = DRE.CD_CVM.nunique()
 count=0
 
 for cvm in DRE.CD_CVM.unique():
     count=count+1
     print(str(count) + '/' + str(numberOfCVM) + ' - cvm: ' + str(cvm))
-    # cvm=9512
+    # cvm=22020
     DF = DRE[(DRE.CD_CVM==cvm)]
     for grupo in ['Individual', 'Consolidado']:
         print('Grupo: ' + grupo)
@@ -252,20 +277,7 @@ for cvm in DRE.CD_CVM.unique():
             
             #Sort para garantir o sequenciamento correto
             df = df.sort_values(['DESC_SIMPLES', 'YEAR','TRIM']).reset_index(drop=True)
-            #Calculate Variação entre Trimestre - AH (Análise Horizontal)
-            cutTwo = (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(1)) 
-            AH = []
-            for i, row in df.iterrows():
-                if cutTwo[i]:
-                    if df.iloc[i-1]['TRIM_VL']!=0:
-                        ah = (df.iloc[i]['TRIM_VL']-df.iloc[i-1]['TRIM_VL'])/df.iloc[i-1]['TRIM_VL']
-                    else:
-                        ah = np.nan
-                    AH.append(ah)
-                else:
-                    AH.append(np.nan)
-            df['AH']=pd.Series(AH)
-            # Calculate TTM (Soma das últimas 4 rows)
+
             cutFour = (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(1)) & (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(2)) & (df.DESC_SIMPLES == df.DESC_SIMPLES.shift(3))
             TTM = []
             for i, row in df.iterrows():
@@ -295,7 +307,8 @@ for cvm in DRE.CD_CVM.unique():
                 data = {
                     "cvm": int(cvm),
                     "ano": int(ano),
-                    "grupo": grupo, 
+                    "grupo": grupo,
+                    "listOfTrims": df[df.YEAR==ano].TRIM.unique().tolist(), 
                     "data" : data,
                 }
                 path = './output_cvm/dre/'+str(cvm)+'/'+grupo+'/'
@@ -303,6 +316,6 @@ for cvm in DRE.CD_CVM.unique():
                     os.makedirs(path)
                 with open(path+str(ano)+'.json', 'w') as outfile:
                     json.dump(data, outfile, indent=2)
-                    print('  '+ str(cvm) +  ' - ' + grupo +' - ' + str(ano)+'.json gravado - ' + str(df[df.YEAR==ano].size))
+                    print('  '+ str(cvm) +  ' - ' + grupo +' - ' + str(ano)+'.json gravado - ' + str(df[df.YEAR==ano].TRIM.unique()))#str(df[df.YEAR==ano].size))
         else:
             print('  ' + str(cvm) +  ' - ' + grupo +' - ' + 'EMPTY')

@@ -55,9 +55,13 @@ res=pd.DataFrame([],columns=[
     "qtd_acoes_pn",
     "qtd_acoes_total",
     ])
+
+# listOfNewCVM = [24953,22357,19100,11975,14176,24910,24902,21334]  
+
 i=0
 erroCount=0
 total=list_of_cia.CD_CVM.nunique()
+# total = len(listOfNewCVM)
 for cvm in list_of_cia.CD_CVM.unique():
     # cvm = 21490
     # cvm=18970
@@ -90,6 +94,6 @@ res=res.set_index('cvm')
 res[' cvm']=res.index
 data = {'dados_cia': res.to_dict('index')}
 # print(json.dumps(data, indent=2))
-with open('./output_b3/dados_cia.json', 'w') as outfile:
+with open('./b3/output_b3/dados_cia.json', 'w') as outfile:
     json.dump(data, outfile, indent=2)
-res.to_csv('./output_b3/dados_cia.csv', index=False)
+# res.to_csv('./output_b3/dados_cia.csv', index=False)
