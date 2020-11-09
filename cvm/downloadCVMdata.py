@@ -95,9 +95,9 @@ def checkPackages(document):
 
 if __name__ == "__main__":  
     checkPackages('cia_aberta-doc-itr')
-    checkPackages('cia_aberta-doc-dfp-dre')
-    checkPackages('cia_aberta-doc-dfp-bpa')
-    checkPackages('cia_aberta-doc-dfp-bpp')
+    # checkPackages('cia_aberta-doc-dfp-dre')
+    # checkPackages('cia_aberta-doc-dfp-bpa')
+    # checkPackages('cia_aberta-doc-dfp-bpp')
 #print('Novo log:')
 #print(input_log)
 
