@@ -7,3 +7,5 @@
 /mypython
 /cvm/cvm_gcloud/env
 /cvm/cvm_gcloud/google-cloud-sdk
+/cvm/cvm_processDRE_gcloud/env
+/cvm/cvm_processDRE_gcloud/google-cloud-sdk
