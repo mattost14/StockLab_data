@@ -41,7 +41,6 @@ MapaNiveis = {
     'Impostos':12,
     'Lucro Líquido': 13,
 }
-
 MapNivel2 = {
     #1
     'Receitas da Intermediação Financeira' : 'Receita Líquida', #Bancos (Ex.: ITAU)
@@ -91,7 +90,6 @@ MapNivel3 = {
 MapGrupo = {
     'DF Individual - Demonstração do Resultado': 'Individual',
     'DF Consolidado - Demonstração do Resultado': 'Consolidado'
-
 }
 # %%
 DRE_ITR_CON = pd.DataFrame()
@@ -149,7 +147,6 @@ DRE.DT_INI_EXERC=pd.to_datetime(DRE.DT_INI_EXERC)
 DRE.DT_FIM_EXERC=pd.to_datetime(DRE.DT_FIM_EXERC)
 #DATA DE REF
 DRE.DT_REFER=pd.to_datetime(DRE.DT_REFER)
-
 #Drop colunas desnecessárias
 DRE.drop(['VERSAO', 'ESCALA_MOEDA', 'MOEDA', 'DS_CONTA'], axis=1, inplace=True)
 

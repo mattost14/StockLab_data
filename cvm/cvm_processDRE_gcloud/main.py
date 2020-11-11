@@ -1,5 +1,8 @@
 from datetime import datetime
+from firebase import db
+from processDREdata_fromStorage import processDREdata
 import json
+
 
 # gcloud functions deploy FUNCTION_NAME \
 #   --runtime RUNTIME \
@@ -17,11 +20,30 @@ import json
 #     print(f'Operation completed in : {end - start}')
     
 
-if __name__ == "__main__": 
-    processDREdata([],[])
 
 
-def processDREdata(data, context):
+def checkUnprocessedPackages():
+    doc_ref = db.collection('cvm_data').document('cia_aberta-doc-itr')
+    try:
+        doc = doc_ref.get()
+        input_log = doc.to_dict()
+        unprocessedPackages = []
+        # Iterate over all the items in dictionary and filter items which has even keys
+        for (key, value) in input_log.items():
+            # print(value['processed'])
+            if(not value['processed']):
+                unprocessedPackages.append(key)
+        print('The following packages need to be processed:') 
+        print(unprocessedPackages)
+    except:
+        print('Error - cvm_data log not found.')
+
+def processDREdata_PubSub(event,context):
+    # 1 - Read the log fields (processed flag)
+    checkUnprocessedPackages()
+
+
+def processDREdata_FirestoreTrigger(data, context):
     """ Triggered by a change to a Firestore document.
     Args:
         data (dict): The event payload.
@@ -36,3 +58,7 @@ def processDREdata(data, context):
 
     print('\nNew value:')
     print(json.dumps(data["value"]))
+
+if __name__ == "__main__":
+    processDREdata(2015) 
+    # checkUnprocessedPackages()
